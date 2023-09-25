@@ -1,0 +1,26 @@
+[
+  {
+    "naceId": "398481",
+    "level": "1",
+    "code": "2",
+    "parent": "A",
+    "description": "AGRICULTURE, FORESTRY AND FISHING",
+    "thisItemIncludes": "This section includes the exploitation of vegetal and animal natural resources, comprising the activities of growing of crops, raising and breeding of animals, harvesting of timber and other plants, animals or animal products from a farm or their natural habitats.",
+    "thisItemAlsoIncludes": "",
+    "rulings": "",
+    "thisItemExcludes": "",
+    "referenceToISICRev": "A"
+  },
+  {
+    "naceId": "398482",
+    "level": "2",
+    "code": "2",
+    "parent": "A",
+    "description": "Growing of non-perennial crops",
+    "thisItemIncludes": "This section includes the exploitation of vegetal and animal natural resources, comprising the activities of growing of crops, raising and breeding of animals, harvesting of timber and other plants, animals or animal products from a farm or their natural habitats.",
+    "thisItemAlsoIncludes": "",
+    "rulings": "",
+    "thisItemExcludes": "",
+    "referenceToISICRev": "B"
+  }
+]
