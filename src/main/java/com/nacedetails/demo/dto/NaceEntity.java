@@ -1,18 +1,15 @@
 package com.nacedetails.demo.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
-import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.validation.annotation.Validated;
 
 
 @Entity
@@ -22,11 +19,14 @@ import java.util.concurrent.atomic.AtomicLong;
 @DynamicInsert
 @DynamicUpdate
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Validated
 @Table(name = "nace")
+@Cacheable
 public class NaceEntity
 {
     @Id
     @Column(name = "naceid")
+    @NotNull
     private Long naceId;
     @Column(name = "level")
 
@@ -61,4 +61,6 @@ public class NaceEntity
     @Column(name = "referenceisicrev")
     private String referenceToISICRev;
 
+    @Version
+    Long version;
 }

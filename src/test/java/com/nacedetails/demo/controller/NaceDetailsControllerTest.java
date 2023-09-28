@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nacedetails.demo.dto.NaceEntity;
 import com.nacedetails.demo.service.NaceService;
 import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.StaleObjectStateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -33,6 +35,8 @@ class NaceDetailsControllerTest {
     ObjectMapper objectMapper;
     ClassPathResource resource;
     List<NaceEntity> naceEntityList;
+
+    List<Long> idList;
     @MockBean
     private NaceService naceService; // Mock the service layer
     @BeforeEach
@@ -41,6 +45,7 @@ class NaceDetailsControllerTest {
         // Load the JSON file from the classpath
          resource = new ClassPathResource("input.json");
         naceEntityList = objectMapper.readValue(resource.getInputStream(),new TypeReference<List<NaceEntity>>() {});
+        idList = Arrays.asList(398481l,398481l);
 
     }
 
@@ -49,7 +54,7 @@ class NaceDetailsControllerTest {
     void putNaceDetails() throws Exception {
 
         // Use the ObjectMapper to parse the JSON file into an object
-        when(naceService.putNaceDetails(naceEntityList)).thenReturn(naceEntityList);
+        when(naceService.putNaceDetails(naceEntityList)).thenReturn(idList);
 
         // Perform the GET request and verify the response
         mockMvc.perform(put("/v1/nace/").contentType(MediaType.APPLICATION_JSON).content(resource.getInputStream().readAllBytes()))
@@ -65,6 +70,16 @@ class NaceDetailsControllerTest {
         // Perform the GET request and verify the response
         mockMvc.perform(put("/v1/nace/").contentType(MediaType.APPLICATION_JSON).content(resource.getInputStream().readAllBytes()))
                 .andExpect(jsonPath("$.cause").value("Internal Server Error"))  .andExpect(status().is5xxServerError());
+    }
+    @Test
+    void putNaceDetailsLockException() throws Exception {
+
+        // Use the ObjectMapper to parse the JSON file into an object
+        when(naceService.putNaceDetails(naceEntityList)).thenThrow(StaleObjectStateException.class);
+
+        // Perform the GET request and verify the response
+        mockMvc.perform(put("/v1/nace/").contentType(MediaType.APPLICATION_JSON).content(resource.getInputStream().readAllBytes()))
+                .andExpect(jsonPath("$.cause").value("Operation rollback because entity you are updating might got changed"))  .andExpect(status().is4xxClientError());
     }
 
 

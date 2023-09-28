@@ -8,9 +8,6 @@ import java.util.List;
 
 public interface NaceService {
 
-     List<NaceEntity> putNaceDetails(List<NaceEntity> nace);
-
-
-
+     List<Long> putNaceDetails(List<NaceEntity> nace);
      NaceEntity getNaceDetails(Long naceId);
 }

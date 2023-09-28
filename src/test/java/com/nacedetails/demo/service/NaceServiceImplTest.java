@@ -15,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,7 @@ class NaceServiceImplTest {
    private ObjectMapper objectMapper;
    private ClassPathResource resource;
     private List<NaceEntity> naceEntityList;
+    List<Long> idList;
  // Mock the service layer
     @BeforeEach
     void setUp() throws IOException {
@@ -40,15 +42,17 @@ class NaceServiceImplTest {
         // Load the JSON file from the classpath
         resource = new ClassPathResource("input.json");
            naceEntityList = objectMapper.readValue(resource.getInputStream(),new TypeReference<List<NaceEntity>>() {});
+        idList = Arrays.asList(398481l,398481l);
 
     }
     @Test
     void putNaceDetails() throws IOException {
 
        when(naceRepository.saveAll(naceEntityList)).thenReturn(naceEntityList);
-       List<NaceEntity> result =  naceService.putNaceDetails(naceEntityList);
+       List<Long> result =  naceService.putNaceDetails(naceEntityList);
        assertEquals(2, result.size());
-        assertEquals(ArrayList.class, result.getClass());
+       assertEquals(ArrayList.class, result.getClass());
+        assertEquals(398481l, result.get(0));
     }
 
     @Test
